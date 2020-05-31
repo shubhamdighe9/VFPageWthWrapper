@@ -1,0 +1,479 @@
+<apex:page standardController="Invoice__c" extensions="ALZahia_taxInvoiceExtension" renderAs="pdf"  recordSetVar="ins">
+    
+    <title>Al Zahia - Customer Invoice</title>
+    <head>
+        <style type="text/css">
+            body{
+            font-family: calibri, arial, sans-serif;
+            font-size:16px;
+            color:#000000
+            }
+            
+            .tableBdr th, .tableBdr td {
+            font-family: calibri, arial, sans-serif;
+            font-size:4px;
+            word-break: all;
+            word-spacing: normal;
+            word-wrap: break-word;
+            }
+        </style>
+    </head> 
+    <apex:repeat value="{!invoices}" var="invoice" id="theRepeat" >
+        <body>
+            <div style="position: relative; width: 100%;display: block;margin-bottom: 15px;clear: both;">
+                
+                
+                <h2  style="font-family: calibri, arial, sans-serif;font-size:20px;float:center;display:inline-block;" >
+                   <apex:outputField value="{!invoice.RecordType.Name}"/>   
+                </h2>
+                <apex:image url="{!$Resource.alzahia}" style="float:right;width:100px;display:inline-block;" height="auto"/>
+            </div>
+            <br/>
+            <table border="0" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%; margin:0 auto; color:#000000">
+                <tbody>
+                    <tr>
+                        <td colspan="2" class="tableBdr">
+                            <table style="width:70%; border:1px solid #D9D4CB; border-collapse:collapse" cellpadding="4">
+                                <tbody><tr>
+                                    <td width="20%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><b>Name</b></td>
+                                    <td width="50%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><apex:outputText value="{!$Label.MAF_AlZahiaInvoiceName}"/> </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><b>Address</b></td>
+                                        <td style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><apex:outputText value="{!$Label.MAF_AlZahiaInvoiceAddress}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><b>TRN</b></td>
+                                        <td style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><apex:outputText value="{!$Label.MAF_AlZahiaInvoiceTRN}"/></td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="2" class="tableBdr">
+                            
+                            <tr>
+                                <td colspan="2" class="tableBdr">
+                                    <table style="width:100%; border:1px solid #D9D4CB; border-collapse:collapse" cellpadding="4">
+                                        <tr>
+                                            <th style="font-family: calibri, arial, sans-serif;font-size:16px;">Customer</th>
+                                        </tr>
+                                        <tbody>
+                                            <tr>
+                                                <td width="20%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><b>Name</b></td>
+                                                <td width="30%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;">
+                                                    <apex:outputText value="{!invoiceMap[invoice].AccountName}"/> 
+                                                </td>
+                                                <td width="20%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><b>Account No</b>
+                                                </td>
+                                                <td width="30%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><apex:outputField value="{!invoice.Account_Number__c}"/> </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><b>Phase</b></td>
+                                                <td width="30%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;">
+                                                    <apex:outputText value="{!invoiceMap[invoice].PhaseName}"/> </td> 
+                                                <td width="20%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><b>Tax Invoice Date</b></td>
+                                                <td width="30%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;">
+                                                    <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                                        <apex:param value="{!invoice.CreatedDate}" /> 
+                                                    </apex:outputText> 
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><b>Unit No</b></td>
+                                                <td width="30%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;">
+                                                    <apex:outputText value="{!invoiceMap[invoice].UnitName}"/>
+                                                </td>
+                                                <td width="20%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><b>Tax Invoice No</b></td>
+                                                <td width="30%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;">
+                                                    <apex:outputField value="{!invoice.Name}"/> 
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><b>Address</b></td>
+                                                <td width="30%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;">
+                                                    <apex:outputText value="{!invoiceMap[invoice].BillingCity}"/>, <apex:outputText value="{!invoiceMap[invoice].BillingState}"/>,<apex:outputText value="{!invoiceMap[invoice].BillingCountry}"/> 
+                                                </td>
+                                                <td width="20%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"><b>TRN</b></td>
+                                                <td width="30%" style="font-family: calibri, arial, sans-serif;font-size:14px;border:1px solid #D9D4CB;"></td>
+                                            </tr>
+                                            
+                                        </tbody></table>
+                                </td>
+                            </tr>
+                            
+                        </td>
+                    </tr>
+                    <br/>
+                    
+                    <tr>
+                        <td colspan="2" class="tableBdr">
+                            <!-- [INVOICE_PAYMENT_ROWS] -->
+                            <apex:pageBlock id="xxxpb1" rendered="{!IF(invoice.RecordType.Name =='Tax Invoice' ,true,false)}">
+                                <table  style="font-family: calibri, arial, sans-serif;font-size:14px;text-align: left; width:100%; border: 1px solid #D9D4CB;  border-collapse: collapse;" cellpadding="4" cellspacing="0">
+                                    <tr style="font-family: calibri, arial, sans-serif;background-color:#d9d4cb; color:#402E00; ">
+                                        <td width="25%"><b>Description</b></td>
+                                        <td width="15%"><b>Due Date</b></td>
+                                        <td width="20%" style="text-align:right"><b>Amount (Exclusive of VAT)</b></td>
+                                        <td width="20%" style="text-align:right"><b>VAT Amount @[VAT_RATE]%</b></td>
+                                        <td width="20%" style="text-align:right"><b>Amount (Inclusive of VAT)</b></td>
+                                    </tr>
+                                    <apex:variable var="cnt" value="{!0}" /> 
+                                    <apex:variable var="taxableVatAmt" value="{!0}" /> 
+                                    <apex:variable var="taxableVatAmtNxt" value="{!0}" /> 
+                                    <apex:variable var="taxableVatAmtFinal" value="{!0}" /> 
+                                    <apex:repeat value="{!invoiceLineItemList}" var="att">
+                                        <apex:outputpanel rendered="{!IF(att.Invoice__c == invoice.Id && att.Line_Type__c =='LINE' ,true,false)}">
+                                            <table border="0" style="border:1px solid #D9D4CB;" width="100%" >
+                                                <tr style="font-family: calibri, arial, sans-serif;font-size:14px;border-bottom :1px solid #D9D4CB;">
+                                                    <td width="25%" > 
+                                                        <b> <apex:outputText value="{!IF(cnt == 0 ,invoice.Instalment__r.Name,att.Description__c)}" /> </b>
+                                                    </td>
+                                                    <td width="15%" >
+                                                        <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                                            <apex:param value="{!IF(cnt == 0 ,invoice.Due_Date__c,'')}" /> 
+                                                        </apex:outputText>
+                                                    </td>
+                                                    <td width="20%" align="right" >
+                                                        
+                                                        <apex:outputText value="{!IF(att.Quantity_Invoiced__c == '-1', '(', '')}{!att.Unit_Selling_Price__c}{!IF(att.Quantity_Invoiced__c == '-1', ')', '')}" />
+                                                    </td> 
+                                                    <td width="20%" align="right"> 
+                                                        
+                                                        <apex:outputText value="{!(att.Unit_Selling_Price__c * invoiceVATMap[invoice] / 100)}" />
+                                                        <!-- <apex:outputText value="{0, number, #0.00}">           
+<apex:param value="{!invoiceVATMap[invoice]}"/>
+</apex:outputText> -->
+                                                    </td>
+                                                    <td width="20%" align="right">
+                                                        <apex:outputText value="{!(att.Unit_Selling_Price__c - (att.Unit_Selling_Price__c * invoiceVATMap[invoice] / 100))}" /> 
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <apex:variable var="taxableVatAmt"  value="{!IF(cnt == 0 ,(att.Unit_Selling_Price__c * invoiceVATMap[invoice] / 100),taxableVatAmt)}" />
+                                            <apex:variable var="taxableVatAmtNxt"  value="{!IF(cnt != 0 ,(att.Unit_Selling_Price__c * invoiceVATMap[invoice] / 100),taxableVatAmtNxt)}" />
+                                            <apex:variable var="taxableVatAmtFinal"  value="{!(IF(cnt == 0 ,(att.Unit_Selling_Price__c * invoiceVATMap[invoice] / 100),taxableVatAmt)) - (IF(cnt != 0 ,(att.Unit_Selling_Price__c * invoiceVATMap[invoice] / 100),taxableVatAmtNxt))}" />
+                                            <apex:variable var="cnt" value="{!cnt+1}"/>
+                                            
+                                        </apex:outputpanel>
+                                    </apex:repeat>
+                                    
+                                    <table border="0" style="border:1px solid #D9D4CB;" width="100%" >
+                                        
+                                        <tr style="font-family: calibri, arial, sans-serif;font-size:14px;border-bottom :1px solid #D9D4CB;">
+                                            <td width="25%" > 
+                                                <b> Taxable Amount </b>
+                                            </td>
+                                            <td width="15%" >
+                                                
+                                            </td>
+                                            <td width="20%" align="right" >
+                                                
+                                                <apex:outputText value="{!invoiceMap[invoice].FinalAmount}" /> 
+                                            </td>
+                                            <td width="20%" align="right">
+                                                <apex:outputText value="{!taxableVatAmtFinal}" /> 
+                                            </td>
+                                            <td width="20%" align="right">
+                                                <apex:outputText value="{!invoiceMap[invoice].FinalAmount}" /> 
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table border="0" style="border:1px solid #D9D4CB;" width="100%" >
+                                        
+                                        <tr style="font-family: calibri, arial, sans-serif;font-size:14px;border-bottom :1px solid #D9D4CB;">
+                                            <td width="25%" > 
+                                                <b> Amount Paid (Advances) </b>
+                                            </td>
+                                            <td width="15%" >
+                                                
+                                            </td>
+                                            <td width="20%" align="right" >
+                                                
+                                                <apex:outputText value="{!invoiceMap[invoice].PaidAmount}" /> 
+                                            </td>
+                                            <td width="20%" align="right">0.00</td>
+                                            <td width="20%" align="right">
+                                                <apex:outputText value="{!invoiceMap[invoice].PaidAmount}" /> 
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table border="0" style="border:1px solid #D9D4CB;" width="100%" >
+                                        
+                                        <tr style="font-family: calibri, arial, sans-serif;font-size:14px;border-bottom :1px solid #D9D4CB;">
+                                            <td width="25%" > 
+                                                <b> Balance </b>
+                                            </td>
+                                            <td width="15%" >
+                                                
+                                            </td>
+                                            <td width="20%" align="right" >
+                                                
+                                                <apex:outputText value="{!invoiceMap[invoice].RemainingAmount}" /> 
+                                            </td>
+                                            <td width="20%" align="right">0.00</td>
+                                            <td width="20%" align="right">
+                                                <apex:outputText value="{!invoiceMap[invoice].RemainingAmount}" /> 
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <tfoot>       
+                                        <tr style="font-family: calibri, arial, sans-serif;font-size:14px;color:#8A1538;">
+                                            <td colspan="5">
+                                                <b>  Total &nbsp;<apex:outputText value="{!invoiceMap[invoice].FinalAmount}"/>
+                                                    UAE dirhams only</b>
+                                            </td>
+                                        </tr> 
+                                    </tfoot> 
+                                </table>
+                            </apex:pageBlock>
+                            
+                            <apex:pageBlock id="xxxpb2" rendered="{!IF(invoice.RecordType.Name =='Advance Tax' ,true,false)}">
+                                <table  style="font-family: calibri, arial, sans-serif;font-size:14px;text-align: left; width:100%; border: 1px solid #D9D4CB;  border-collapse: collapse;" cellpadding="4" cellspacing="0">
+                                    <tr style="font-family: calibri, arial, sans-serif;background-color:#d9d4cb; color:#402E00; ">
+                                        <td width="25%"><b>Description</b></td>
+                                        <td width="15%"><b>Due Date</b></td>
+                                        <td width="20%" style="text-align:right"><b>Amount (Exclusive of VAT)</b></td>
+                                        <td width="20%" style="text-align:right"><b>VAT Amount @[VAT_RATE]%</b></td>
+                                        <td width="20%" style="text-align:right"><b>Amount (Inclusive of VAT)</b></td>
+                                    </tr>
+                                    <apex:variable var="cnt" value="{!0}" /> 
+                                    <apex:repeat value="{!invoiceLineItemList}" var="att">
+                                        <apex:outputpanel rendered="{!IF(att.Invoice__c == invoice.Id && att.Line_Type__c =='LINE' ,true,false)}">
+                                            <table border="0" style="border:1px solid #D9D4CB;" width="100%" >
+                                                
+                                                <tr style="font-family: calibri, arial, sans-serif;font-size:14px;border-bottom :1px solid #D9D4CB;">
+                                                    <td width="25%" > 
+                                                        <b> <apex:outputText value="{!IF(invoice.Instalment__c != null ,invoice.Instalment__r.Name,invoice.Opportunity_Charge__r.Name)}" /> </b>
+                                                    </td>
+                                                    <td width="15%" >
+                                                        <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                                            <apex:param value="{!IF(cnt == 0 ,invoice.Due_Date__c,'')}" /> 
+                                                        </apex:outputText>
+                                                    </td>
+                                                    <td width="20%" align="right" >
+                                                        <apex:outputText value="{!invoice.Invoice_Amount__c}"/> 
+                                                    </td>
+                                                    <td width="20%" align="right">0.00</td>
+                                                    <td width="20%" align="right">
+                                                        <apex:outputText value="{!invoice.Invoice_Amount__c}"/> 
+                                                    </td>
+                                                </tr>
+                                                
+                                            </table>
+                                            <apex:variable var="cnt" value="{!cnt+1}"/>
+                                        </apex:outputpanel>
+                                    </apex:repeat>
+                                    <table border="0" style="border:1px solid #D9D4CB;" width="100%" >
+                                        <tr style="font-family: calibri, arial, sans-serif;font-size:14px;border-bottom :1px solid #D9D4CB;">
+                                            <td width="25%" > 
+                                                <b> Taxable Amount </b>
+                                            </td>
+                                            <td width="15%" >
+                                                
+                                            </td>
+                                            <td width="20%" align="right" >
+                                                <apex:outputText value="{!invoice.Invoice_Amount__c}"/> 
+                                            </td>
+                                            <td width="20%" align="right">0.00</td>
+                                            <td width="20%" align="right">
+                                                <apex:outputText value="{!invoice.Invoice_Amount__c}"/> 
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table border="0" style="border:1px solid #D9D4CB;" width="100%" >
+                                        
+                                        <tr style="font-family: calibri, arial, sans-serif;font-size:14px;border-bottom :1px solid #D9D4CB;">
+                                            <td width="25%" > 
+                                                <b> Amount Paid (Advances) </b>
+                                            </td>
+                                            <td width="15%" >
+                                                
+                                            </td>
+                                            <td width="20%" align="right" >
+                                                
+                                                <apex:outputText value="{!invoiceMap[invoice].PaidAmount}" /> 
+                                            </td>
+                                            <td width="20%" align="right">0.00</td>
+                                            <td width="20%" align="right">
+                                                <apex:outputText value="{!invoiceMap[invoice].PaidAmount}" /> 
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table border="0" style="border:1px solid #D9D4CB;" width="100%" >
+                                        
+                                        <tr style="font-family: calibri, arial, sans-serif;font-size:14px;border-bottom :1px solid #D9D4CB;">
+                                            <td width="25%" > 
+                                                <b> Balance </b>
+                                            </td>
+                                            <td width="15%" >
+                                                
+                                            </td>
+                                            <td width="20%" align="right" >
+                                                <apex:outputText value="{!(invoiceMap[invoice].PaidAmount - invoice.Invoice_Amount__c)}" />
+                                            </td>
+                                            <td width="20%" align="right">0.00</td>
+                                            <td width="20%" align="right">
+                                                <apex:outputText value="{!invoiceMap[invoice].RemainingAmount}" /> 
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <tfoot>       
+                                        <tr style="font-family: calibri, arial, sans-serif;font-size:14px;color:#8A1538;">
+                                            <td colspan="5">
+                                                <b>  Total &nbsp;<apex:outputText value="{!invoiceMap[invoice].FinalAmount}"/> UAE dirhams only</b>
+                                            </td>
+                                        </tr> 
+                                    </tfoot>
+                                </table>
+                            </apex:pageBlock>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+            <table border="0" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%; margin:0 auto; color:#000000" class="tableBdr">
+                <tbody><tr>
+                    <td colspan="2"></td></tr>
+                    <tr>
+                        <th style="font-family: calibri, arial, sans-serif;font-size:16px;">Payment Terms: </th>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="font-family: calibri, arial, sans-serif;font-size:14px;padding-left:20px">1. Cheques/Transfers should be in favor of &nbsp; <apex:outputText value="{!$Label.MAF_AlZahiaInvoiceName}"/>. </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="font-family: calibri, arial, sans-serif;font-size:14px;padding-left:20px">
+                            <table>
+                                <tbody><tr style="font-family: calibri, arial, sans-serif;font-size:14px;">
+                                    <td>Beneficiary Name</td>
+                                    <td><apex:outputText value="{!$Label.MAF_AlZahiaInvoiceName}"/></td>
+                                    </tr>
+                                    <tr style="font-family: calibri, arial, sans-serif;font-size:14px;">
+                                        <td>Account Number</td>
+                                        <td><apex:outputText value="{!$Label.MAF_AlZahiaInvoiceAccNumber}"/></td>
+                                    </tr>
+                                    <tr style="font-family: calibri, arial, sans-serif;font-size:14px;">
+                                        <td>Bank Name</td>
+                                        <td><apex:outputText value="{!$Label.MAF_AlZahiaInvoiceBankName}"/></td>
+                                    </tr>
+                                    <tr style="font-family: calibri, arial, sans-serif;font-size:14px;">
+                                        <td>Branch Address</td>
+                                        <td><apex:outputText value="{!$Label.MAF_AlZahiaInvoiceBankAddress}"/></td>
+                                    </tr>
+                                    <tr style="font-family: calibri, arial, sans-serif;font-size:14px;">
+                                        <td>Swift</td>
+                                        <td><apex:outputText value="{!$Label.MAF_AlZahiaInvoiceSwift}"/></td>
+                                    </tr>
+                                    <tr style="font-family: calibri, arial, sans-serif;font-size:14px;">
+                                        <td>IBAN</td>
+                                        <td><apex:outputText value="{!$Label.MAF_AlZahiaInvoiceIBAN}"/></td>
+                                    </tr>
+                                </tbody></table>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="2" style="font-family: calibri, arial, sans-serif;font-size:14px;padding-left:20px">2. Payment not made on the due date will be subject to the late payment fees.</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="font-family: calibri, arial, sans-serif;font-size:14px;padding-left:20px;">3. Kindly send the payment slip to AlZahiapayments@maf.ae.</td>
+                    </tr>
+                    <tr><td colspan="2">&nbsp;</td></tr>
+                    
+                </tbody></table>
+        </body>
+        <br/>
+    </apex:repeat>
+    
+</apex:page>
+
+
+========================controller=========================
+
+
+public class ALZahia_taxInvoiceExtension {
+    
+    public List<Invoice__c> invoices{get;set;} 
+    public List<Invoice_Line_Item__c> invoiceLineItemList{get;set;} 
+    public Map<Invoice__c,Decimal> invoiceVATMap{get;set;}
+    public Map<Invoice__c,InstallmentOppChargeWrapper> invoiceMap{get;set;}
+    public ALZahia_taxInvoiceExtension(ApexPages.StandardSetController  controller) { 
+        invoices = new List<Invoice__c> ();
+        invoiceVATMap = new Map<Invoice__c,Decimal>();
+        invoiceMap = new Map<Invoice__c,InstallmentOppChargeWrapper>();
+        invoiceLineItemList = new List<Invoice_Line_Item__c> ();
+        invoices = [SELECT Id,  Name, RecordTypeId,RecordType.Name,  Invoice_Amount__c, Instalment__c,Instalment__r.Name, CreatedDate,
+                    Invoice_Type__c, Opportunity_Charge__c, Opportunity_Charge__r.Name,  Due_Date__c, Tax_Rate_Code__c, Customer_Trx_Id__c, Trx_Number__c,
+                    Receipt_Number__c, Unit_Transfer__c, Amount_Due__c, Account_Number__c,
+                    Instalment__r.Opportunity__r.Account.Name,Instalment__r.Opportunity__r.Phase__r.name, // installment fields 
+                    Instalment__r.Opportunity__r.Unit_Name__c,Instalment__r.Opportunity__r.Account.BillingCity,
+                    Instalment__r.Opportunity__r.Account.BillingState,Instalment__r.Opportunity__r.Account.BillingCountry,
+                    Instalment__r.Final_Amount__c, Instalment__r.Paid_Amount__c, Instalment__r.Remaining_Amount__c,
+                    Opportunity_Charge__r.Opportunity__r.Account.Name,Opportunity_Charge__r.Opportunity__r.Phase__r.name, //opportunity charges  fields
+                    Opportunity_Charge__r.Opportunity__r.Unit_Name__c,Opportunity_Charge__r.Opportunity__r.Account.BillingCity,
+                    Opportunity_Charge__r.Opportunity__r.Account.BillingState,Opportunity_Charge__r.Opportunity__r.Account.BillingCountry,
+                    Opportunity_Charge__r.Amount__c, Opportunity_Charge__r.Paid_Amount__c, Opportunity_Charge__r.Pending_Amount__c, 
+                    Instalment__r.Opportunity__r.Unit__r.Vat_Rate_Code__r.Percentage_Rate__c
+                    FROM Invoice__c 
+                    WHERE Id IN :controller.getSelected()];
+        system.debug('invoices = '+invoices);
+        
+        for(Invoice__c c: invoices){
+            if(c.Instalment__c != null){
+                invoiceMap.put(c,new InstallmentOppChargeWrapper(c.Instalment__r.Opportunity__r.Account.Name,c.Instalment__r.Opportunity__r.Phase__r.name,c.Instalment__r.Opportunity__r.Unit_Name__c,
+                                                                 c.Instalment__r.Opportunity__r.Account.BillingCity,c.Instalment__r.Opportunity__r.Account.BillingState,c.Instalment__r.Opportunity__r.Account.BillingCountry,
+                                                                 c.Instalment__r.Final_Amount__c,c.Instalment__r.Paid_Amount__c,c.Instalment__r.Remaining_Amount__c));
+            }else if(c.Opportunity_Charge__c != null){
+                invoiceMap.put(c,new InstallmentOppChargeWrapper(c.Opportunity_Charge__r.Opportunity__r.Account.Name,c.Opportunity_Charge__r.Opportunity__r.Phase__r.name,c.Opportunity_Charge__r.Opportunity__r.Unit_Name__c,
+                                                                 c.Opportunity_Charge__r.Opportunity__r.Account.BillingCity,c.Opportunity_Charge__r.Opportunity__r.Account.BillingState,c.Opportunity_Charge__r.Opportunity__r.Account.BillingCountry,
+                                                                 c.Opportunity_Charge__r.Amount__c,c.Opportunity_Charge__r.Paid_Amount__c,c.Opportunity_Charge__r.Pending_Amount__c));
+            }
+        }
+        system.debug('invoiceMap = '+invoiceMap);
+        for(Invoice__c idVal : invoices){
+            Decimal taxRate = idVal.Instalment__r.Opportunity__r.Unit__r.Vat_Rate_Code__r.Percentage_Rate__c!=null ?idVal.Instalment__r.Opportunity__r.Unit__r.Vat_Rate_Code__r.Percentage_Rate__c :0;
+            system.debug('idVal= '+idVal);
+            invoiceVATMap.put(idVal,taxRate);
+        }
+        for(Invoice_Line_Item__c ili : [SELECT Id, Name, Invoice__c, Line_Type__c, Description__c, Amount__c, Tax_Rate_Code__c, Tax_Regime_Code__c, Quantity_Invoiced__c, Trx_Line_Id__c, Unit_Selling_Price__c, Link_to_Trx_Line_Id__c
+                                        FROM Invoice_Line_Item__c WHERE  Invoice__c in: invoices]){
+                                            invoiceLineItemList.add(ili);
+                                        }
+        system.debug('invoices = '+invoices);
+        system.debug('invoiceLineItemList = '+invoiceLineItemList);
+    }
+    
+    
+    public class InstallmentOppChargeWrapper{
+        @auraEnabled public String AccountName{get;set;}	
+        @auraEnabled public String PhaseName{get;set;}	
+        @auraEnabled public String UnitName{get;set;}	
+        @auraEnabled public String BillingCity{get;set;}	
+        @auraEnabled public String BillingState{get;set;}	
+        @auraEnabled public String BillingCountry{get;set;}	
+        @auraEnabled public Decimal FinalAmount{get;set;}
+        @auraEnabled public Decimal PaidAmount{get;set;}	
+        @auraEnabled public Decimal RemainingAmount{get;set;}	
+        
+        public InstallmentOppChargeWrapper(){
+        }
+        
+        public InstallmentOppChargeWrapper(String AccountName,String PhaseName,String UnitName,String BillingCity,String BillingState,
+                                           String BillingCountry,Decimal FinalAmount,Decimal PaidAmount,Decimal RemainingAmount)
+        {
+            this.AccountName = AccountName;
+            this.PhaseName = PhaseName;
+            this.UnitName = UnitName;
+            this.BillingCity = BillingCity;
+            this.BillingState = BillingState;
+            this.BillingCountry = BillingCountry;
+            this.FinalAmount = FinalAmount;
+            this.PaidAmount = PaidAmount;
+            this.RemainingAmount = RemainingAmount;
+        }
+        
+    }    
+}
